@@ -7,23 +7,24 @@ import platform
 
 keyboard = Controller()
 
+__all__ = ["learn"]
 
-def core_printer(concept, **kwargs):
+
+
+def _core_printer(concept, **kwargs):
     if platform.system() == "Windows":
         isTypeFast = True
         if "speed" in kwargs:
             if not kwargs["speed"]:
                 isTypeFast = False
-        jump_end_of_file()
         output = concept()
-        keyboard.press(Key.enter)
-        keyboard.press(Key.enter)
-        if getForegroundWindowTitle().find("Visual Studio Code"):
+        if _get_foreground_window_title().find("Visual Studio Code"):
             with keyboard.pressed(Key.ctrl): 
                keyboard.press("1")
                keyboard.release("1")
+            _jump_end_of_file()
             for char in output:
-                if getForegroundWindowTitle().find("Visual Studio Code"):
+                if _get_foreground_window_title().find("Visual Studio Code"):
                     if char == ";":
                         keyboard.press(Key.enter)
                         keyboard.release(Key.enter)
@@ -49,7 +50,7 @@ def core_printer(concept, **kwargs):
         exit()
 
 
-def getForegroundWindowTitle():
+def _get_foreground_window_title():
     hWnd = windll.user32.GetForegroundWindow()
     length = windll.user32.GetWindowTextLengthW(hWnd)
     buf = create_unicode_buffer(length + 1)
@@ -62,25 +63,29 @@ def getForegroundWindowTitle():
         return None
 
 
-def jump_end_of_file():
+def _jump_end_of_file():
     keyboard.press(Key.end)
+    keyboard.release(Key.end)
     keyboard.press(Key.enter)
+    keyboard.release(Key.enter)
     keyboard.press(Key.enter)
+    keyboard.release(Key.enter)
     keyboard.press(Key.home)
+    keyboard.press(Key.enter)
     """ with keyboard.pressed(Key.ctrl):
         keyboard.press(Key.end)
         keyboard.release(Key.end)
     keyboard.press(Key.home) """
 
 
-def learn_function():
+def _learn_function():
     return r"""def my_function():; 
 return 'a';;
 <tmp = my_function();
 print(tmp)"""
 
 
-def learn_classes():
+def _learn_classes():
     return r"""class My_Class:; 
 def __init__(self,initialValue):;
 self.value=initialValue ;;
@@ -88,7 +93,7 @@ self.value=initialValue ;;
 print(obj.value)"""
 
 
-def learn_contextManager_as_function():
+def _learn_contextManager_as_function():
     return r"""# PLEASE IMPORT : from contextlib import contextmanager;
 @contextmanager;def context_manager_name(name,mode):
 ;#insert your code to be called when the context is opened;
@@ -99,7 +104,7 @@ yield f;
 None"""
 
 
-def learn_threading_basic():
+def _learn_threading_basic():
     return r"""#PLEASE IMPORT : import threading;
 def worker_thread(num):;
 print('Worker: %s' % num);
@@ -139,19 +144,19 @@ class _Grammar(object):
     @constant
     def return_grammar():
         return {
-            "class": learn_classes,
-            "classes": learn_classes,
-            "function": learn_function,
-            "method": learn_function,
-            "methods": learn_function,
-            "functions": learn_function,
-            "context_manager": learn_contextManager_as_function,
-            "context manager": learn_contextManager_as_function,
+            "class": _learn_classes,
+            "classes": _learn_classes,
+            "function": _learn_function,
+            "method": _learn_function,
+            "methods": _learn_function,
+            "functions": _learn_function,
+            "context_manager": _learn_contextManager_as_function,
+            "context manager": _learn_contextManager_as_function,
             "regular expression": learn_regex_patterns,
             "regular_expression": learn_regex_patterns,
             "regex": learn_regex_patterns,
-            "threading": learn_threading_basic,
-            "thread": learn_threading_basic,
+            "threading": _learn_threading_basic,
+            "thread": _learn_threading_basic,
         }
 
 
@@ -167,7 +172,7 @@ def learn(input, **kwargs):
     if match:
         matchedInput = match.group().lower()
     if matchedInput in GRAMMAR:
-        core_printer(GRAMMAR[matchedInput])
+        _core_printer(GRAMMAR[matchedInput])
     else:
         print(
             "Sorry, learning word not found .Try calling function learn_list() to get a list of learning words "
@@ -183,6 +188,4 @@ context_manager OR context manager
 regular_expression OR regular epxression OR regex"""
     )
 
-if __name__ == "main":
-    None
 
