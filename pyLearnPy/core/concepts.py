@@ -10,7 +10,6 @@ keyboard = Controller()
 __all__ = ["learn"]
 
 
-
 def _core_printer(concept, **kwargs):
     if platform.system() == "Windows":
         isTypeFast = True
@@ -187,5 +186,3 @@ method OR methods
 context_manager OR context manager
 regular_expression OR regular epxression OR regex"""
     )
-
-

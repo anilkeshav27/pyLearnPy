@@ -2,4 +2,4 @@ dist/
 build/
 pyLearnPy.egg-info/
 pyLearnPy/__pycache__/
- pyLearnPy/core/__pycache__/
+pyLearnPy/core/__pycache__/
